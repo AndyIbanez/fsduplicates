@@ -28,7 +28,6 @@
 		6C8ECD081D1B59370048F9D7 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		6C8ECD101D1B5ABC0048F9D7 /* AcoustID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AcoustID.swift; path = Model/AcoustID.swift; sourceTree = "<group>"; };
 		6C8ECD141D1B5BAF0048F9D7 /* client_id.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = client_id.plist; path = Meta/client_id.plist; sourceTree = "<group>"; };
-		6C8ECD151D1B5CC20048F9D7 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +63,6 @@
 				6C8ECD131D1B5B7C0048F9D7 /* Meta */,
 				6C8ECD0F1D1B5A850048F9D7 /* Model */,
 				6C8ECD081D1B59370048F9D7 /* main.swift */,
-				6C8ECD151D1B5CC20048F9D7 /* .gitignore */,
 			);
 			path = fsduplicates;
 			sourceTree = "<group>";
