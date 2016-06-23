@@ -10,3 +10,4 @@ import Foundation
 
 print("Hello, World!")
 
+AcoustID.instance

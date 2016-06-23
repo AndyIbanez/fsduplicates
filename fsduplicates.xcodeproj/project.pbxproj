@@ -9,17 +9,19 @@
 /* Begin PBXBuildFile section */
 		6C8ECD091D1B59370048F9D7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8ECD081D1B59370048F9D7 /* main.swift */; };
 		6C8ECD111D1B5ABC0048F9D7 /* AcoustID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8ECD101D1B5ABC0048F9D7 /* AcoustID.swift */; };
+		6C8ECD191D1B72F90048F9D7 /* client_id.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C8ECD141D1B5BAF0048F9D7 /* client_id.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		6C8ECD031D1B59370048F9D7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 7;
 			files = (
+				6C8ECD191D1B72F90048F9D7 /* client_id.plist in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
