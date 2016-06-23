@@ -83,6 +83,11 @@ if let fFlagIndex = arguments.index(of: "-f") {
         exit(1)
     }
     
-    let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"])
-    print("source files are \(sourceFiles)")
+    consoleOutput("Reading files in directory...")
+    var isDir: ObjCBool = false
+    let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default().fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
+    for var i in 0...3 {
+        print("File is \(sourceFiles[i])")
+    }
+    //print("source files are \(sourceFiles)")
 }
