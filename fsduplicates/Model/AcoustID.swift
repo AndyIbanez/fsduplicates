@@ -21,7 +21,6 @@ class AcoustID {
     private init() {
         let bundle = Bundle.main()
         
-        
         let fileManager = FileManager.default()
             
         var isDir: ObjCBool = false
@@ -35,4 +34,6 @@ class AcoustID {
             fatalError("No client_id.plist file found")
         }
     }
+    
+    ///
 }
