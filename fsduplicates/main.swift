@@ -82,6 +82,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
         }
         exit(1)
     }
+    
+    let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"])
+    print("source files are \(sourceFiles)")
 }
-
-//print(shell(launchPath: "/usr/local/bin/fpcalc", arguments: ["-a"]))
