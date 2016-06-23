@@ -8,15 +8,34 @@
 
 import Foundation
 
-/// We need to ensure that fpcalc exists. If not we will try to use the default.
-let fpcalcPath: String
+private let fpcalcPath: String
 
 let arguments = Process.arguments
 
+// Trigger help.
+
+if arguments.contains("-h") {
+    usage()
+    exit(0)
+}
+
+// We are gonna check that fpalc does exist, or that it was passed as a valid path. If fpalc is not found, exit early.
+
 if let fpcalcIndex = arguments.index(of: "-fpcalc-path") {
+    // Ensuring that a path to fpcalc was passed.
     let pathIndex = fpcalcIndex + 1
     if pathIndex >= arguments.count {
+        print("Invalid fpcalc path")
         usage()
+        exit(1)
+    }
+    
+    // Ensuring that fpcalc can be called at that specific path.
+    fpcalcPath = arguments[pathIndex]
+    
+    let fpcalcExecutableExists = FileManager.default().isExecutableFile(atPath: fpcalcPath)
+    if !fpcalcExecutableExists {
+        print("\(fpcalcPath) does not exist. Exiting...")
         exit(1)
     }
 } else {
@@ -24,4 +43,4 @@ if let fpcalcIndex = arguments.index(of: "-fpcalc-path") {
     fpcalcPath = "/usr/local/bin/fpcalc"
 }
 
-print(shell(launchPath: "/usr/local/bin/fpcalc", arguments: ["-a"]))
+//print(shell(launchPath: "/usr/local/bin/fpcalc", arguments: ["-a"]))

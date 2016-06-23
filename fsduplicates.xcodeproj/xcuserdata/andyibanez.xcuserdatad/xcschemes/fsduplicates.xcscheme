@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-fpcalc-path"
+            argument = "-fpcalc-path &quot;/usr/local/bin/fpcalc&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

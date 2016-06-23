@@ -40,7 +40,7 @@ func consoleOutput(_ message: String) {
 
 /// Outputs the usage information.
 func usage() {
-    print("usage: fpcalc [OPTIONS]\n\n")
+    print("usage: fpcalc [OPTIONS] DIR_TO_SEARCH DIR_TO_OUTPUT\n")
     print("Options:\n")
     print(" -fpcalc-path FPCALC_PATH            fpcalc executable path. Default is /usr/local/bin/fpcalc")
     print(" -v                                  Verbose mode.")
