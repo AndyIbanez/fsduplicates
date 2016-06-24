@@ -19,10 +19,13 @@ enum Status: Int8 {
 
 /// Represents a Fingerprint returned by AcoustID.
 struct Fingerprint {
+    /// The acoustid of the file returned by AcoustID.
+    let acoustID: String
+    
     /// Initializes a Fingerprint with raw data (returned from a web server).
     ///
     /// - parameter data: The raw data to build the fingerprint object with.
     init(data: Data) {
-        
+        acoustID = ""
     }
 }

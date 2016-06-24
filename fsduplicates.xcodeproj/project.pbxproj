@@ -12,6 +12,7 @@
 		6C8ECD191D1B72F90048F9D7 /* client_id.plist in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C8ECD141D1B5BAF0048F9D7 /* client_id.plist */; };
 		6C8ECD1B1D1B83F00048F9D7 /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8ECD1A1D1B83F00048F9D7 /* Fingerprint.swift */; };
 		6C8ECD1D1D1B87520048F9D7 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8ECD1C1D1B87520048F9D7 /* Helpers.swift */; };
+		6C8ECD1F1D1DCF500048F9D7 /* Internet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8ECD1E1D1DCF4F0048F9D7 /* Internet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		6C8ECD141D1B5BAF0048F9D7 /* client_id.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = client_id.plist; path = Meta/client_id.plist; sourceTree = "<group>"; };
 		6C8ECD1A1D1B83F00048F9D7 /* Fingerprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Fingerprint.swift; path = Model/Fingerprint.swift; sourceTree = "<group>"; };
 		6C8ECD1C1D1B87520048F9D7 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		6C8ECD1E1D1DCF4F0048F9D7 /* Internet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Internet.swift; path = Model/Internet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				6C8ECD101D1B5ABC0048F9D7 /* AcoustID.swift */,
 				6C8ECD1A1D1B83F00048F9D7 /* Fingerprint.swift */,
 				6C8ECD1C1D1B87520048F9D7 /* Helpers.swift */,
+				6C8ECD1E1D1DCF4F0048F9D7 /* Internet.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 				6C8ECD091D1B59370048F9D7 /* main.swift in Sources */,
 				6C8ECD111D1B5ABC0048F9D7 /* AcoustID.swift in Sources */,
 				6C8ECD1D1D1B87520048F9D7 /* Helpers.swift in Sources */,
+				6C8ECD1F1D1DCF500048F9D7 /* Internet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

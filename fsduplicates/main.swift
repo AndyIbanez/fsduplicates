@@ -8,8 +8,10 @@
 
 import Foundation
 
-private let fpcalcPath: String
+/// Path of the fpcalc tool.
+let fpcalcPath: String
 
+/// Command line arguments.
 let arguments = Process.arguments
 
 // Trigger help.
@@ -87,7 +89,11 @@ if let fFlagIndex = arguments.index(of: "-f") {
     var isDir: ObjCBool = false
     let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default().fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
     for var i in 0...3 {
-        print("File is \(sourceFiles[i])")
+        AcoustID.shared.calculateFingerprint(atPath: sourceFiles[i], callback: { (fingerprint, error) in
+            if error != nil {
+                
+            }
+        })
     }
     //print("source files are \(sourceFiles)")
 }
