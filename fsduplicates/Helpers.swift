@@ -85,6 +85,23 @@ func validDirectory(path: String, parameterName: String) -> DirectoryCheckStatus
 func file(file: String, loggedInOutputFile outputFile: String) -> Bool {
     let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputFile])
     let shellResult = shell(launchPath: "/bin/cat", arguments: [outputFile])
-    print("shellResult \(shellResult)")
-    return true
+    if shellResult.contains(outputFile) {
+        return true
+    }
+    return false
+}
+
+/// Writes a string at the end of the specified file.
+///
+/// - parameter string: String to write.
+/// - parameter path: Path of the file to write in.
+func write(string: String, toFile file: String) {
+    guard let dataToWrite = string.data(using: .utf8) else {
+        return
+    }
+    
+    let fileHandle = FileHandle(forWritingAtPath: file)
+    fileHandle?.seekToEndOfFile()
+    fileHandle?.write(dataToWrite)
+    fileHandle?.closeFile()
 }

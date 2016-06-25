@@ -109,7 +109,9 @@ if let fFlagIndex = arguments.index(of: "-f") {
         print("arg")
         sleep(2)
         for var j in i ... i + 2 {
-            file(file: sourceFiles[j], loggedInOutputFile: outputSourceFile)
+            if !file(file: sourceFiles[j], loggedInOutputFile: outputSourceFile) {
+                write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
+            }
             print("j is \(j)")
         }
     }
