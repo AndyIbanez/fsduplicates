@@ -150,8 +150,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
 if let showFlagIndex = arguments.index(of: "-s") {
     
     // Ensuring the command is valid.
-    
-    if showFlagIndex < arguments.count - 1 {
+    if showFlagIndex < arguments.count - 2 {
         print("Missing parameter DIR_TO_OUTPUT")
         usage()
         exit(1)
@@ -186,9 +185,52 @@ if let showFlagIndex = arguments.index(of: "-s") {
     let catTask = Task()
     let cutTask = Task()
     let sortTask = Task()
-    let unicTask = Task()
+    let uniqTask = Task()
     let sortResultTask = Task()
     
     catTask.launchPath = "/bin/cat"
     catTask.arguments = [filesAndHashesFile]
+    
+    cutTask.launchPath = "/usr/bin/cut"
+    cutTask.arguments = ["-d", ":", "-f1"]
+    
+    sortTask.launchPath = "/usr/bin/sort"
+    
+    uniqTask.launchPath = "/usr/bin/uniq"
+    uniqTask.arguments = ["-c"]
+    
+    sortResultTask.launchPath = "/usr/bin/sort"
+    sortResultTask.arguments = ["-nr"]
+    
+    let pipeBetweenCatAndCut = Pipe()
+    catTask.standardOutput = pipeBetweenCatAndCut
+    cutTask.standardInput = pipeBetweenCatAndCut
+    
+    let pipeBetweenCutAndSort = Pipe()
+    cutTask.standardOutput = pipeBetweenCutAndSort
+    sortTask.standardInput = pipeBetweenCutAndSort
+    
+    let pipeBetweenSortAndUniq = Pipe()
+    sortTask.standardOutput = pipeBetweenSortAndUniq
+    uniqTask.standardInput = pipeBetweenSortAndUniq
+    
+    let pipeBetweenUniqAndFinalSort = Pipe()
+    uniqTask.standardOutput = pipeBetweenUniqAndFinalSort
+    sortResultTask.standardInput = pipeBetweenUniqAndFinalSort
+    
+    let finalPipe = Pipe()
+    sortResultTask.standardOutput = finalPipe
+    
+    let resultToRead = finalPipe.fileHandleForReading
+    
+    catTask.launch()
+    cutTask.launch()
+    sortTask.launch()
+    uniqTask.launch()
+    sortResultTask.launch()
+    
+    let resultData = resultToRead.readDataToEndOfFile()
+    let result = String(data: resultData, encoding: .utf8)
+
+    print("result is \(result)")
 }
