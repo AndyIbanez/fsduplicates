@@ -116,7 +116,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
                 AcoustID.shared.calculateFingerprint(atPath: sourceFiles[j], callback: { (fingerprint, error) in
                     if let error = error {
                         switch error {
-                            case .InvalidFileFingerprint(let message): consoleOutput(message)
+                            case .InvalidFileFingerprint(let message): consoleOutput("Error on file \(sourceFiles[j]): \(message)")
                         }
                     } else {
                         if let fp = fingerprint {

@@ -59,20 +59,18 @@ class AcoustID {
     /// - parameter callback: Closure to call after the operation is done.
     func calculateFingerprint(atPath path: String, callback: AcoustIDFingerprintClosure) {
         if let fpcalc = self.fcpalc(forFilePath: path) {
-            print("fpcalc is \(fpcalc)")
             let baseUrl = "http://api.acoustid.org/v2/lookup"
             let durQuery = "duration=\(fpcalc.duration)"
             let fpQuery = "fingerprint=\(fpcalc.fingerprint)"
             let cliQuery = "client=\(clientID)"
-            let fullUrl = baseUrl + "?\(durQuery)&\(fpQuery)&\(cliQuery)"
-            print("full url \(fullUrl)")
-            Internet.shared.get(URL(string: fullUrl)!) { data, statusCode, error in
-                
+            print("full url \(baseUrl)")
+            Internet.shared.post(to: URL(string: baseUrl)!, with: [durQuery, fpQuery, cliQuery]) { data, statusCode, error in
+                print("request done: \(data) statusCode \(statusCode), error: \(error)")
             }
+        } else {
+            let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
+            callback(fingerprint: nil, error: error)
         }
-        
-        let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
-        callback(fingerprint: nil, error: error)
     }
     
     // MARK: Helper methods.

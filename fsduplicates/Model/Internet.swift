@@ -9,7 +9,7 @@
 import Foundation
 
 /// Block with HTTP GET results.
-typealias GetResult = (data: Data?, statusCode: Int?, error: ErrorProtocol?) -> Void
+typealias HTTPResult = (data: Data?, statusCode: Int?, error: ErrorProtocol?) -> Void
 
 /// Small helper class to deal with HTTP.
 class Internet {
@@ -24,18 +24,38 @@ class Internet {
     
     /// HTTP GET to the specified URL.
     ///
-    /// - parameter url: URL of the URL to GET.
+    /// - parameter url: URL to get.
     /// - parameter callback: The method that should get called when the operation is finished.
-    func get(_ url: URL, _ callback: GetResult) {
+    func get(_ url: URL, _ callback: HTTPResult) {
         // let expectedCharSet = NSCharacterSet.URLQueryAllowedCharacterSet()
-        session.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.async {
-                var statusCode: Int? = nil
-                if let httpResponse = response as? HTTPURLResponse {
-                    statusCode = httpResponse.statusCode
-                }
-                callback(data: data, statusCode: statusCode, error: error)
+        let task = session.dataTask(with: url) { (data, response, error) in
+            var statusCode: Int? = nil
+            if let httpResponse = response as? HTTPURLResponse {
+                statusCode = httpResponse.statusCode
             }
+            callback(data: data, statusCode: statusCode, error: error)
         }
+        
+        task.resume()
+    }
+    
+    /// HTTP POST to the specified URL
+    ///
+    /// - parameter url: URL to post to.
+    /// - parameter values: Key-Value pairs to send along the request.
+    /// - parameter callback: Closure to call when the request is done.
+    func post (to url: URL, with parameters: [String], _ callback: HTTPResult) {
+        var request = URLRequest(url: url)
+        let params = parameters.reduce("") { "\($0)\($1)&" }
+        request.httpBody = params.data(using: .utf8)
+        request.httpMethod = "POST"
+        let task = session.dataTask(with: request) { data, response, error in
+            var statusCode: Int? = nil
+            if let httpResponse = response as? HTTPURLResponse {
+                statusCode = httpResponse.statusCode
+            }
+            callback(data: data, statusCode: statusCode, error: error)
+        }
+        task.resume()
     }
 }
