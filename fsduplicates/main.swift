@@ -149,6 +149,9 @@ if let fFlagIndex = arguments.index(of: "-f") {
 
 if let showFlagIndex = arguments.index(of: "-s") {
     
+    /// A touple for keeping track of AcoustID's and their repetitions.
+    typealias FingerprintRepetitions = (repeated: Int, acoustID: String)
+    
     // Ensuring the command is valid.
     if showFlagIndex < arguments.count - 2 {
         print("Missing parameter DIR_TO_OUTPUT")
@@ -232,5 +235,22 @@ if let showFlagIndex = arguments.index(of: "-s") {
     let resultData = resultToRead.readDataToEndOfFile()
     let result = String(data: resultData, encoding: .utf8)
 
-    print("result is \(result)")
+    let resultFps = result?.characters.split {$0 == "\n"}.map(String.init)
+    if let res = resultFps {
+        //  string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let cleaned: [FingerprintRepetitions] = res.map { rawPair in
+            let noWs = rawPair.trimmingCharacters(in: NSCharacterSet.whitespaces())
+            let pair = noWs.characters.split{ $0 == " " }.map(String.init)
+            if let nInt = Int(pair[0]) {
+                let p: FingerprintRepetitions = (nInt, pair[1])
+                return p
+            }
+            return (0, "") // Not very likely to happen at all.
+        }
+        
+        print("cleaned is \(cleaned)")
+    } else {
+        consoleOutput("Error reading proceded results.")
+        exit(1)
+    }
 }
