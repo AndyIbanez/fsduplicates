@@ -47,6 +47,7 @@ func consoleOutput(_ message: String) {
 
 /// Outputs the usage information.
 func usage() {
+    print("fsduplicates ver. \(VERSION)\n")
     print("usage: fsduplicates [OPTIONS]\n")
     print("Options:\n")
     print(" -f DIR_TO_SEARCH DIR_TO_OUTPUT      Find duplicates in DIR_TO_SEARCH recursively. Output to DIR_TO_OUTPUT")
@@ -54,7 +55,11 @@ func usage() {
     print(" -v                                  Verbose mode.")
 }
 
-// Checks that valid path exists and that it is a directory.
+/// Checks that valid path exists and that it is a directory.
+///
+/// - parameter path: Path to check.
+/// - parameter parameterName: Name of the parameter where this is being checked.
+/// - return: A `DirectoryCheckStatus` containing the message and status.
 func validDirectory(path: String, parameterName: String) -> DirectoryCheckStatus {
     var isDir: ObjCBool = false
     
@@ -71,4 +76,15 @@ func validDirectory(path: String, parameterName: String) -> DirectoryCheckStatus
     }
     
     return(Bool(isDir), message)
+}
+
+/// Checks if a file already exists in an output file, to avoid scanning it again.
+///
+/// - parameter file: File to check.
+/// - parameter loggedInOutputFile: The output file to check if the file has been logged into.
+func file(file: String, loggedInOutputFile outputFile: String) -> Bool {
+    let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputFile])
+    let shellResult = shell(launchPath: "/bin/cat", arguments: [outputFile])
+    print("shellResult \(shellResult)")
+    return true
 }

@@ -8,6 +8,11 @@
 
 import Foundation
 
+// MARK: Tool info
+
+/// Command line tool version
+let VERSION = "1.0.0"
+
 /// Path of the fpcalc tool.
 let fpcalcPath: String
 
@@ -50,6 +55,9 @@ if !fpcalcExecutableExists {
 // MARK: -f flag logic (if present).
 
 if let fFlagIndex = arguments.index(of: "-f") {
+    // Acoustic id and file path touple.
+    typealias AcousticPair = (acoustID: String, filePath: String)
+    
     // This flag requires to extra arguments.
     let minimumExpectedSize = fFlagIndex + 2
     
@@ -85,15 +93,25 @@ if let fFlagIndex = arguments.index(of: "-f") {
         exit(1)
     }
     
+    let outputSourceFile = outputDir + "/library"
+    
+    let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputSourceFile])
+    
     consoleOutput("Reading files in directory...")
+    
     var isDir: ObjCBool = false
     let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default().fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
-    for var i in 0...3 {
-        AcoustID.shared.calculateFingerprint(atPath: sourceFiles[i], callback: { (fingerprint, error) in
-            if error != nil {
-                
-            }
-        })
+    
+    /// AcoustID's API requirements only allow us to make three calls every second. We will manually get three elements per iteration, and the stride will help us avoid repetition.
+    for var i in stride(from: 0, to: sourceFiles.count, by: 3) {
+        print("i is \(i)")
+
+        print("arg")
+        sleep(2)
+        for var j in i ... i + 2 {
+            file(file: sourceFiles[j], loggedInOutputFile: outputSourceFile)
+            print("j is \(j)")
+        }
     }
     //print("source files are \(sourceFiles)")
 }
