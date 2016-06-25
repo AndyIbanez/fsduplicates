@@ -111,6 +111,9 @@ if let fFlagIndex = arguments.index(of: "-f") {
     for var i in stride(from: 0, to: sourceFiles.count, by: 3) {
         sleep(3)
         for var j in i ... i + 2 {
+            if j >= sourceFiles.count {
+                break
+            }
             if loggedFiles.index(of: sourceFiles[j]) != nil {
                 consoleOutput("\(sourceFiles[j]) is already logged")
             } else {

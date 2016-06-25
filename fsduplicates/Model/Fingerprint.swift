@@ -28,7 +28,6 @@ struct Fingerprint {
     init?(data: Data) {
         do {
             let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
-            print("JSON is \(json)")
             guard let results = json["results"] else {
                 return nil
             }

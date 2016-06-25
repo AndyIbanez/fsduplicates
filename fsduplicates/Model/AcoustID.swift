@@ -78,7 +78,7 @@ class AcoustID {
                         var error: AcoustIDError? = nil
                         let fp = Fingerprint(data: dat)
                         if fp == nil {
-                            error = .NoFingerPrintFound("No Fingerprint found.")
+                            error = .NoFingerprintFound("No Fingerprint found.")
                         }
                         callback(fingerprint: fp, error: error)
                     } else {
