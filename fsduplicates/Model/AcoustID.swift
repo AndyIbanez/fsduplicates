@@ -63,9 +63,9 @@ class AcoustID {
             let durQuery = "duration=\(fpcalc.duration)"
             let fpQuery = "fingerprint=\(fpcalc.fingerprint)"
             let cliQuery = "client=\(clientID)"
-            print("full url \(baseUrl)")
+            // The URL will always be valid, so no problem with the forced unwrap.
             Internet.shared.post(to: URL(string: baseUrl)!, with: [durQuery, fpQuery, cliQuery]) { data, statusCode, error in
-                print("request done: \(data) statusCode \(statusCode), error: \(error)")
+                print("info is \(data) statusCode \(statusCode) \(error)")
             }
         } else {
             let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
