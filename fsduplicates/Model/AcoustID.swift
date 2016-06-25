@@ -62,7 +62,7 @@ class AcoustID {
             print("fpcalc is \(fpcalc)")
         }
         
-        let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint.")
+        let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
         callback(fingerprint: nil, error: error)
     }
     

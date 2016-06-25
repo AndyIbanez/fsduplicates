@@ -94,8 +94,12 @@ if let fFlagIndex = arguments.index(of: "-f") {
     }
     
     let outputSourceFile = outputDir + "/library"
+    let filesAndHashesFile = outputDir + "/fps_library"
     
     let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputSourceFile])
+    let _ = shell(launchPath: "/usr/bin/touch", arguments: [filesAndHashesFile])
+    
+    let loggedFiles = shell(launchPath: "/bin/cat", arguments: [outputSourceFile]).characters.split{$0 == "\n"}.map(String.init)
     
     consoleOutput("Reading files in directory...")
     
@@ -104,15 +108,26 @@ if let fFlagIndex = arguments.index(of: "-f") {
     
     /// AcoustID's API requirements only allow us to make three calls every second. We will manually get three elements per iteration, and the stride will help us avoid repetition.
     for var i in stride(from: 0, to: sourceFiles.count, by: 3) {
-        print("i is \(i)")
-
-        print("arg")
         sleep(2)
         for var j in i ... i + 2 {
-            if !file(file: sourceFiles[j], loggedInOutputFile: outputSourceFile) {
-                write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
+            if loggedFiles.index(of: sourceFiles[j]) != nil {
+                consoleOutput("\(sourceFiles[j]) is already logged")
+            } else {
+                AcoustID.shared.calculateFingerprint(atPath: sourceFiles[j], callback: { (fingerprint, error) in
+                    if let error = error {
+                        switch error {
+                            case .InvalidFileFingerprint(let message): consoleOutput(message)
+                        }
+                    } else {
+                        if let fp = fingerprint {
+                            write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
+                            write(string: "\(sourceFiles[j]):\(fp)", toFile: filesAndHashesFile)
+                        } else {
+                            consoleOutput("AcoustID returned successfully, but fingerprint is empty for file: \(sourceFiles[j])")
+                        }
+                    }
+                })
             }
-            print("j is \(j)")
         }
     }
     //print("source files are \(sourceFiles)")
