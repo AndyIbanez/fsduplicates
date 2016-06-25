@@ -76,6 +76,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-f &quot;/Volumes/iTunes/Music/Nightwish&quot; &quot;/Users/andyibanez/fsduplicates_results_nightwish&quot;"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-s &quot;/Users/andyibanez/fsduplicates_results_nightwish&quot;"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

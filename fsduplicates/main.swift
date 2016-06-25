@@ -141,5 +141,54 @@ if let fFlagIndex = arguments.index(of: "-f") {
             }
         }
     }
-    //print("source files are \(sourceFiles)")
+    consoleOutput("The index has been created")
+    exit(0)
+}
+
+// MARK: -s flag (if present).
+
+if let showFlagIndex = arguments.index(of: "-s") {
+    
+    // Ensuring the command is valid.
+    
+    if showFlagIndex < arguments.count - 1 {
+        print("Missing parameter DIR_TO_OUTPUT")
+        usage()
+        exit(1)
+    }
+    
+    var interactive = arguments.index(of: "-i") == nil ? false : true
+    
+    let outputDir = arguments[showFlagIndex + 1]
+    let (validOutput, outputMessage) = validDirectory(path: outputDir, parameterName: "DIR_TO_OUTPUT")
+    
+    if !validOutput {
+        if let msg = outputMessage {
+            print("\(msg)")
+        } else {
+            print("Unknown error")
+        }
+        exit(1)
+    }
+    
+    let outputSourceFile = outputDir + "/library"
+    let filesAndHashesFile = outputDir + "/fps_library"
+    let noFingerprintsFile = outputDir + "/no_fps_library"
+    
+    if !FileManager.default().fileExists(atPath: filesAndHashesFile) {
+        print("No duplicates found. Did you run the -f flag specifying \(outputDir) as the DIR_TO_OUTPUT?")
+        exit(1)
+    }
+    
+    consoleOutput("Detecting duplicates...")
+    
+    // cat fps_library | cut -d":" -f1 | sort | uniq -c | sort
+    let catTask = Task()
+    let cutTask = Task()
+    let sortTask = Task()
+    let unicTask = Task()
+    let sortResultTask = Task()
+    
+    catTask.launchPath = "/bin/cat"
+    catTask.arguments = [filesAndHashesFile]
 }

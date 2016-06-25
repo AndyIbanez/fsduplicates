@@ -50,9 +50,11 @@ func usage() {
     print("fsduplicates ver. \(VERSION)\n")
     print("usage: fsduplicates [OPTIONS]\n")
     print("Options:\n")
+    print(" -i                                  When specified for supported commands, makes interaction interactive.")
     print(" -f DIR_TO_SEARCH DIR_TO_OUTPUT      Find duplicates in DIR_TO_SEARCH recursively. Output to DIR_TO_OUTPUT")
     print(" -fpcalc-path FPCALC_PATH            fpcalc executable path. Default is /usr/local/bin/fpcalc")
     print(" -v                                  Verbose mode.")
+    print(" -s [-i] DIR_TO_OUTPUT               Show all the duplicates for the specified library (DIR_TO_OUTPUT)")
 }
 
 /// Checks that valid path exists and that it is a directory.
