@@ -108,7 +108,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
     
     /// AcoustID's API requirements only allow us to make three calls every second. We will manually get three elements per iteration, and the stride will help us avoid repetition.
     for var i in stride(from: 0, to: sourceFiles.count, by: 3) {
-        sleep(2)
+        sleep(3)
         for var j in i ... i + 2 {
             if loggedFiles.index(of: sourceFiles[j]) != nil {
                 consoleOutput("\(sourceFiles[j]) is already logged")
@@ -117,11 +117,12 @@ if let fFlagIndex = arguments.index(of: "-f") {
                     if let error = error {
                         switch error {
                             case .InvalidFileFingerprint(let message): consoleOutput("Error on file \(sourceFiles[j]): \(message)")
+                            case .ServerError(let message): consoleOutput("Server error for file \(sourceFiles[j]): \(message)")
                         }
                     } else {
                         if let fp = fingerprint {
                             write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
-                            write(string: "\(sourceFiles[j]):\(fp)", toFile: filesAndHashesFile)
+                            write(string: "\(fp.acoustID):\(sourceFiles[j])\n", toFile: filesAndHashesFile)
                         } else {
                             consoleOutput("AcoustID returned successfully, but fingerprint is empty for file: \(sourceFiles[j])")
                         }

@@ -25,7 +25,17 @@ struct Fingerprint {
     /// Initializes a Fingerprint with raw data (returned from a web server).
     ///
     /// - parameter data: The raw data to build the fingerprint object with.
-    init(data: Data) {
-        acoustID = ""
+    init?(data: Data) {
+        do {
+            let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+            guard let results = json["results"]??[0]?["id"], let id = results as? String else {
+                return nil
+            }
+            
+            acoustID = id
+        } catch {
+            consoleOutput("Error creating Fingerprint object: \(error)")
+            return nil
+        }
     }
 }

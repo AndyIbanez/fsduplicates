@@ -23,6 +23,9 @@ class AcoustID {
     enum AcoustIDError: ErrorProtocol {
         /// The provided file is either invalid or could not generate a valid fingerprint.
         case InvalidFileFingerprint(String)
+        
+        /// Server error.
+        case ServerError(String)
     }
     
     // MARK: Properties.
@@ -65,7 +68,16 @@ class AcoustID {
             let cliQuery = "client=\(clientID)"
             // The URL will always be valid, so no problem with the forced unwrap.
             Internet.shared.post(to: URL(string: baseUrl)!, with: [durQuery, fpQuery, cliQuery]) { data, statusCode, error in
-                print("info is \(data) statusCode \(statusCode) \(error)")
+                if let er = error {
+                    callback(fingerprint: nil, error: .ServerError("\(er)"))
+                } else {
+                    if let dat = data {
+                        let fp = Fingerprint(data: dat)
+                        callback(fingerprint: fp, error: nil)
+                    } else {
+                        callback(fingerprint: nil, error: .ServerError("data is nil."))
+                    }
+                }
             }
         } else {
             let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
