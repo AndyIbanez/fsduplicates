@@ -95,9 +95,9 @@ if let fFlagIndex = arguments.index(of: "-f") {
     
     let outputSourceFile = outputDir + "/library"
     let filesAndHashesFile = outputDir + "/fps_library"
+    let noFingerprintsFile = outputDir + "/no_fps_library"
     
-    let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputSourceFile])
-    let _ = shell(launchPath: "/usr/bin/touch", arguments: [filesAndHashesFile])
+    let _ = shell(launchPath: "/usr/bin/touch", arguments: [outputSourceFile, filesAndHashesFile, noFingerprintsFile])
     
     let loggedFiles = shell(launchPath: "/bin/cat", arguments: [outputSourceFile]).characters.split{$0 == "\n"}.map(String.init)
     
@@ -105,6 +105,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
     
     var isDir: ObjCBool = false
     let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default().fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
+    consoleOutput("Validating songs against AcoustID and building the index. This can take a while...")
     
     /// AcoustID's API requirements only allow us to make three calls every second. We will manually get three elements per iteration, and the stride will help us avoid repetition.
     for var i in stride(from: 0, to: sourceFiles.count, by: 3) {
@@ -118,10 +119,15 @@ if let fFlagIndex = arguments.index(of: "-f") {
                         switch error {
                             case .InvalidFileFingerprint(let message): consoleOutput("Error on file \(sourceFiles[j]): \(message)")
                             case .ServerError(let message): consoleOutput("Server error for file \(sourceFiles[j]): \(message)")
+                            
+                            case .NoFingerprintFound(let message):
+                                let msg = "No AcoustID found for file: \(sourceFiles[j])"
+                                consoleOutput(msg)
+                                write(string: (sourceFiles[j] + "\n"), toFile: noFingerprintsFile)
                         }
                     } else {
                         if let fp = fingerprint {
-                            consoleOutput("Obtained fingerprint for \(sourceFiles[j]): \(fp)")
+                            consoleOutput("Obtained fingerprint for \(sourceFiles[j]): \(fp.acoustID)")
                             write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
                             write(string: "\(fp.acoustID):\(sourceFiles[j])\n", toFile: filesAndHashesFile)
                         } else {

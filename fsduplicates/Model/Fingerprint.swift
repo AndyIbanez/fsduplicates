@@ -28,11 +28,20 @@ struct Fingerprint {
     init?(data: Data) {
         do {
             let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
-            guard let results = json["results"]??[0]?["id"], let id = results as? String else {
+            print("JSON is \(json)")
+            guard let results = json["results"] else {
                 return nil
             }
             
-            acoustID = id
+            if let idCounts = results?.count where idCounts > 0 {
+                if let id = results?[0]?["id"] as? String {
+                    acoustID = id
+                } else {
+                    return nil
+                }
+            } else {
+                return nil
+            }
         } catch {
             consoleOutput("Error creating Fingerprint object: \(error)")
             return nil

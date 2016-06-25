@@ -26,6 +26,9 @@ class AcoustID {
         
         /// Server error.
         case ServerError(String)
+        
+        /// A fingerprint was not found for this file.
+        case NoFingerprintFound(String)
     }
     
     // MARK: Properties.
@@ -72,8 +75,12 @@ class AcoustID {
                     callback(fingerprint: nil, error: .ServerError("\(er)"))
                 } else {
                     if let dat = data {
+                        var error: AcoustIDError? = nil
                         let fp = Fingerprint(data: dat)
-                        callback(fingerprint: fp, error: nil)
+                        if fp == nil {
+                            error = .NoFingerPrintFound("No Fingerprint found.")
+                        }
+                        callback(fingerprint: fp, error: error)
                     } else {
                         callback(fingerprint: nil, error: .ServerError("data is nil."))
                     }
