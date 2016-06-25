@@ -67,8 +67,8 @@ It's good to know some concepts I have defined in the development of fsduplicate
 
 Whenever you see a command that takes a `DIR_TO_OUTPUT` parameter, this parameter is called a *Library Path*. When you are executing operations with fsduplicates, it will generate files and put them in this *Library*. You need to manually create this *Library*, either using finder or the Shell's `mkdir` dir, and pass it on to fsduplicates flags that need it.
 
-The process of going through your music library and getting their `AcoustID`s is called *Processing*.
+The process of going through your music library and getting their `AcoustID`s is called *Indexing*.
 
 Depending on the commands, fsduplicates will generate some files inside the Library you passed it.
 
-* `Library`: This is a plain text file that simply includes all the files it has proceded in a folder you passed as a `DIR_TO_SEARCH` parameter. For example, it can list all the songs it has proceeded in your `Music` folder in your Mac User Directory.
+* `library`: This is a plain text file that simply includes all the files it has indexed in a folder you passed as a `DIR_TO_SEARCH` parameter. For example, it can list all the songs it has proceeded in your `Music` folder in your Mac User Directory. This file aids fsduplicates to avoid reindexing songs and make it more efficient.
