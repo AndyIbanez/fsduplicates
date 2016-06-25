@@ -121,6 +121,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
                         }
                     } else {
                         if let fp = fingerprint {
+                            consoleOutput("Obtained fingerprint for \(sourceFiles[j]): \(fp)")
                             write(string: (sourceFiles[j] + "\n"), toFile: outputSourceFile)
                             write(string: "\(fp.acoustID):\(sourceFiles[j])\n", toFile: filesAndHashesFile)
                         } else {
