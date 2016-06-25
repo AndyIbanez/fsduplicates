@@ -11,7 +11,7 @@ import Foundation
 // MARK: Tool info
 
 /// Command line tool version
-let VERSION = "1.0.0"
+let VERSION = "0.0.1"
 
 /// Path of the fpcalc tool.
 let fpcalcPath: String
@@ -184,6 +184,8 @@ if let showFlagIndex = arguments.index(of: "-s") {
     
     consoleOutput("Detecting duplicates...")
     
+    // Executing logic.
+    
     // cat fps_library | cut -d":" -f1 | sort | uniq -c | sort
     let catTask = Task()
     let cutTask = Task()
@@ -235,6 +237,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
     let resultData = resultToRead.readDataToEndOfFile()
     let result = String(data: resultData, encoding: .utf8)
 
+    // The ultimate goal of this is to take all the raw output of the pipe and convert it into an array of FingerprintRepetitions.
     let resultFps = result?.characters.split {$0 == "\n"}.map(String.init)
     if let res = resultFps {
         //  string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -248,7 +251,13 @@ if let showFlagIndex = arguments.index(of: "-s") {
             return (0, "") // Not very likely to happen at all.
         }
         
-        print("cleaned is \(cleaned)")
+        // We only care about the ones that are repeated. So those who appear only once are discarded.
+        let filtered = cleaned.filter{ $0.repeated > 1 }
+        
+        // Read all the files from the library to do the the comparison.
+        let loggedFiles = shell(launchPath: "/bin/cat", arguments: [outputSourceFile]).characters.split{$0 == "\n"}.map(String.init)
+        
+        print("filtered \(filtered)")
     } else {
         consoleOutput("Error reading proceded results.")
         exit(1)
