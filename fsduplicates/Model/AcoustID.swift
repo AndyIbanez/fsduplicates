@@ -60,6 +60,15 @@ class AcoustID {
     func calculateFingerprint(atPath path: String, callback: AcoustIDFingerprintClosure) {
         if let fpcalc = self.fcpalc(forFilePath: path) {
             print("fpcalc is \(fpcalc)")
+            let baseUrl = "http://api.acoustid.org/v2/lookup"
+            let durQuery = "duration=\(fpcalc.duration)"
+            let fpQuery = "fingerprint=\(fpcalc.fingerprint)"
+            let cliQuery = "client=\(clientID)"
+            let fullUrl = baseUrl + "?\(durQuery)&\(fpQuery)&\(cliQuery)"
+            print("full url \(fullUrl)")
+            Internet.shared.get(URL(string: fullUrl)!) { data, statusCode, error in
+                
+            }
         }
         
         let error = AcoustIDError.InvalidFileFingerprint("The file does not contain a valid fingerprint")
@@ -72,6 +81,15 @@ class AcoustID {
     ///
     /// - parameter forFilePath: Location of the file to calculate the fingerprint of.
     private func fcpalc(forFilePath file: String) -> FPCalcResult? {
+        
+        /// Split a KEY=value pair and return the value.
+        ///
+        /// - parameter keyValue: The keyValue pair to split.
+        func splitKeyValuePair(_ kvp: String) -> String {
+            let splat = kvp.characters.split{ $0 == "="}.map(String.init)
+            return splat[1] // Unless fpcalc changes, this is guaranteed to always work.
+        }
+        
         let fpcalcResult = shell(launchPath: fpcalcPath, arguments: [file, "-hash"])
         
         let resultArray = fpcalcResult.characters.split{$0 == "\n"}.map(String.init)
@@ -80,14 +98,14 @@ class AcoustID {
             return nil
         }
         
-        let file = resultArray[0]
+        let file = splitKeyValuePair(resultArray[0])
         
-        guard let duration = Int(resultArray[1]) else {
+        guard let duration = Int(splitKeyValuePair(resultArray[1])) else {
             return nil
         }
         
-        let fingerprint = resultArray[2]
-        let hash = resultArray[3]
+        let fingerprint = splitKeyValuePair(resultArray[2])
+        let hash = splitKeyValuePair(resultArray[3])
         
         return (file, duration, fingerprint, hash)
     }

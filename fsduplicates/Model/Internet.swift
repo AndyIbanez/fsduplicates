@@ -17,7 +17,10 @@ class Internet {
     private let session = URLSession(configuration: .default())
     
     /// Shared instance.
-    let shared = Internet()
+    static let shared = Internet()
+    
+    /// Private initializer
+    private init() {}
     
     /// HTTP GET to the specified URL.
     ///
