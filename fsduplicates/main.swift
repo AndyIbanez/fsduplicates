@@ -378,14 +378,18 @@ if let showFlagIndex = arguments.index(of: "-s") {
                             do {
                                 if let file = option.fileSelection where (file - 1) < existing.count {
                                     let songP = songPath(existing[file - 1])
+                                    let songN = songName(songP)
                                     consoleOutput("Attempting to move file to directory...")
-                                    //try FileManager.default().moveItem(atPath: songP, toPath: acoustidDirPath)
+                                    try FileManager.default().createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false , attributes: nil)
+                                    try FileManager.default().moveItem(atPath: songP, toPath: (acoustidDirPath + "/\(songN)"))
                                     loggedFiles = loggedFiles.filter { return !$0.contains(songP) }
                                     try FileManager.default().removeItem(atPath: filesAndHashesFile)
                                     FileManager.default().createFile(atPath: filesAndHashesFile, contents: nil, attributes: nil)
                                     for line in loggedFiles {
                                         write(string: "\(line)\n", toFile: filesAndHashesFile)
                                     }
+                                    consoleOutput("File moved successfully.")
+                                    continue
                                 } else {
                                     print("Invalid song number.")
                                     continue
