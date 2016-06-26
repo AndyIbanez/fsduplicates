@@ -272,6 +272,65 @@ if let showFlagIndex = arguments.index(of: "-s") {
                 return false
             }
             print("-----------------------------------")
+            
+            /// Represents a single action.
+            enum SReadlineAction: String {
+                /// Move
+                case m
+                
+                /// Symbolic link all
+                case s
+                
+                /// Delete a file
+                case d
+                
+                /// Skip to next duplicate sets.
+                case i
+                
+                /// User option is invalid.
+                case invalid
+                
+                /// Creates an action with a raw value.
+                init(rawOption: String) {
+                    switch rawOption {
+                        case "m": self = m
+                        case "s": self = s
+                        case "d": self = d
+                        case "i": self = i
+                        default: self = invalid
+                    }
+                }
+            }
+            
+            /// Represents a valid interactive action.
+            typealias SReadlineOption = (action: SReadlineAction, fileSeletion: Int?, errorMessage: String?)
+            
+            func parseOption(userInput: String) -> SReadlineOption {
+                let splat = userInput.characters.split{$0 == " "}.map(String.init)
+                
+                var opt: SReadlineAction = .invalid
+                var file: Int? = nil
+                
+                if splat.count > 0 {
+                    opt = SReadlineAction(rawOption: splat[0])
+                    if splat.count > 1 {
+                        file = Int(splat[1])
+                    }
+                } else {
+                    return (.invalid, 0, "Please insert an option")
+                }
+                return (.invalid, 0, "Please insert an option")
+            }
+            
+            if interactive {
+                var option: SReadlineOption?
+                repeat {
+                    print("What do you want to do?:")
+                    print("(m)ove file to Library               (d)elete a file")
+                    print("(s)ymbolic link all to Library       (i)gnore")
+                    option = nil
+                } while option == nil || option?.action == .invalid
+            }
         }
         
         //print("filtered \(filtered)")
