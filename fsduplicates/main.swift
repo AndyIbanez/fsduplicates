@@ -315,7 +315,18 @@ if let showFlagIndex = arguments.index(of: "-s") {
             }
         }
         
-        itemsFor: for item in filtered {
+        func songName(_ fullPath: String) -> String {
+            let components = fullPath.characters.split{$0 == "/"}.map(String.init)
+            return components[components.count - 1]
+        }
+        
+        func songPath(_ keyPair: String) -> String {
+            // keyPair = acoustid:file_path
+            let components = keyPair.characters.split{$0 == ":"}.map(String.init)
+            return components[components.count - 1]
+        }
+        
+        for item in filtered {
             let acoustid = item.acoustID
             print("\n-----------------------------------")
             print("Showing duplicates for \(acoustid):")
@@ -332,7 +343,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
             print("-----------------------------------")
             
             if interactive {
-                var option: SReadlineOption
+                var option: SReadlineOption = (.invalid, nil, nil)
                 repeat {
                     print("What do you want to do?:")
                     print("(m)ove file to Library               (d)elete a file")
@@ -341,12 +352,29 @@ if let showFlagIndex = arguments.index(of: "-s") {
                     if let opt = readLine(strippingNewline: true) {
                         option = parseOption(userInput: opt)
                         if option.action == .invalid {
-                            print("\n"+option.errorMessage!+"\n")
+                            print("\n"+option.errorMessage!+"\n") // Everytime `action` is invalid, it will have an errorMessage. Safe to force-unwrap.
                             continue
                         }
                         
                         if option.action == .s {
-                            
+                            let acoustidDirPath = outputDir + "/\(acoustid)"
+                            do {
+                                consoleOutput("Attempting to create directory for symbolic links...")
+                                try FileManager.default().createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false, attributes: nil)
+                                consoleOutput("Directory created for symbolic links: \(acoustidDirPath)")
+                                for file in existing {
+                                    let nameSong = songName(file)
+                                    let songLink = acoustidDirPath + "/\(nameSong)"
+                                    try FileManager.default().createSymbolicLink(atPath: songLink, withDestinationPath: songPath(file))
+                                    consoleOutput("Created symbolic link for \(songLink) \(file)")
+                                }
+                            } catch {
+                                consoleOutput("Error creating symbolic links links: \(error)")
+                            }
+                        }
+                        
+                        if option.action == .i {
+                            break
                         }
                     } else {
                         continue
