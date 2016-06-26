@@ -31,7 +31,7 @@ fsduplicates was designed to not rely on dependencies, but due to the nature of 
 
 ### Installing Chromaprint
 
-Chromaprint is a core component of the AcoustID project. Chromaprint includes a command line tool called `fpcalc` which fsduplicates a lot. You can follow the instructions [here](https://acoustid.org/chromaprint) to install it, or, if you have [Homebrew](brew.sh) installed on your Mac, you can install it easily using the following command in your Terminal:
+Chromaprint is a core component of the AcoustID project. Chromaprint includes a command line tool called `fpcalc` which fsduplicates uses a lot. You can follow the instructions [here](https://acoustid.org/chromaprint) to install it, or, if you have [Homebrew](brew.sh) installed on your Mac, you can install it easily using the following command in your Terminal:
 
 ```Bash
 brew install chromaprint
@@ -220,3 +220,7 @@ Your `client_id.plist` should be like this:
 ```
 
 Replace `YOUR_API_KEY` with the API key you just got from AcoustID. You should be able to build the project now.
+
+# Roadmap
+
+1. Clean the code.
