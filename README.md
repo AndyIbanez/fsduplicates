@@ -100,7 +100,7 @@ You can try to calculate how long till an scanning operation completes. For exam
 
 #### Automatic Analysis
 
-**(Coming soon to a fsduplicates near you)**
+*(Coming soon to a fsduplicates near you)*
 
 #### Manual Analysis
 
