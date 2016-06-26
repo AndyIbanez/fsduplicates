@@ -163,3 +163,31 @@ I reiterate that fsduplicates will have tools to help you better manage duplicat
 > **Warning!**
 >
 > Even if the `AcoustID`s are the same, you should take some care and listen to them before deleting them to ensure they really are the same song. Audio Fingerprinting works great and it has a strong mathematical background, but there's still a chance it will bring back inaccurate results. Still, AcoustID is used by many popular apps used by audiophiles, so there's probably little to worry about.
+
+## For Developers
+
+If you want to build upon this tool or submit pull requests, clone the `git clone` the project like you normally would.
+
+You will have to do two additional steps, namely:
+
+1. Get an AcoustID API key
+2. Add that API key to the project.
+
+To get an AcoustID API key, head over to the [AcoustID website](acoustid.org) and [register an application](https://acoustid.org/new-application). You will instantly get your API key. Please ensure that any changes you do to this project play by their rules.
+
+To add the API key to the project, open the project file, extend the `Meta` group, and create a new `plist` there. Name it `client_id.plist`. Ensure that navigate to the physical `Meta` directory when the prompt asks you where to save the file, otherwise Xcode won't be able to find it.
+
+Your `client_id.plist` should be like this:
+
+```Text
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>client_id</key>
+	<string>YOUR_API_KEY</string>
+</dict>
+</plist>
+```
+
+Replace `YOUR_API_KEY` with the API key you just got from AcoustID. You should be able to build the project now.
