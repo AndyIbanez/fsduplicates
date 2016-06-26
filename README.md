@@ -25,8 +25,6 @@ Before you start using this tool, you should take proper precautions. The curren
 
 ## Installation Guide
 
-*(This section is currently incomplete)*
-
 fsduplicates was designed to not rely on dependencies, but due to the nature of the project, you will need to install one.
 
 ### Installing Chromaprint
