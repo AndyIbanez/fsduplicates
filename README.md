@@ -100,8 +100,6 @@ You can try to calculate how long till an scanning operation completes. For exam
 
 #### Automatic Analysis
 
-*(Incomplete Section)*
-
 You can execute the following command to show a list of fingerprint groups containing the songs that match the same `AcoustID`:
 
 `fsduplicates -s LIBRARY`
@@ -111,6 +109,28 @@ Note that in order to execute this command, you must have executed the indexing 
 Example:
 
 `fsduplicates -s ~/Documents/fsduplicates_nightwish`
+
+You can execute this command with the `-i` flag. This will show an interactive prompts where you can do some actions. Currently the only supported action is to create symbolic links of all files in the specified Library.
+
+`fsduplicates -s -i ~/Documents/fsduplicates_nightwish`
+
+You can then easily load all the symbolic links in a player to listen to them and decided what to do with the duplicates.
+
+```Text
+-----------------------------------
+Showing duplicates for 08fcc296-7d3f-483f-86ea-cfbe725d291d:
+1. /Volumes/iTunes/Music/Nightwish/Bless The Child/02 The Wayfarer.m4a
+2. /Volumes/iTunes/Music/Nightwish/Century Child/12 The Wayfarer.m4a
+3. /Volumes/iTunes/Music/Nightwish/Ever Dream/03 The Wayfarer.m4a
+4. /Volumes/iTunes/Music/Nightwish/Highest Hopes/2-01 The Wayfarer.m4a
+5. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/15 Wayfarer.m4a
+6. /Volumes/iTunes/Music/Nightwish/Wishsides/2-03 The Wayfarer.m4a
+-----------------------------------
+What do you want to do?:
+(s)ymbolic link all to Library       (i)gnore
+
+OPTION: 
+```
 
 The groups will be sorted by the most amount of duplicates to the least. Sample output:
 
@@ -224,3 +244,4 @@ Replace `YOUR_API_KEY` with the API key you just got from AcoustID. You should b
 # Roadmap
 
 1. Clean the code.
+2. Finish implementing the (m)ove and (d)delete actions. Some code is ready for this. For anyone interested in taking this task, these operations should only move and delete the files in the filesystem, but it should also delete them from the `fps_library` file.
