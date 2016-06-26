@@ -110,28 +110,6 @@ Example:
 
 `fsduplicates -s ~/Documents/fsduplicates_nightwish`
 
-You can execute this command with the `-i` flag. This will show an interactive prompts where you can do some actions. Currently the only supported action is to create symbolic links of all files in the specified Library.
-
-`fsduplicates -s -i ~/Documents/fsduplicates_nightwish`
-
-You can then easily load all the symbolic links in a player to listen to them and decided what to do with the duplicates.
-
-```Text
------------------------------------
-Showing duplicates for 08fcc296-7d3f-483f-86ea-cfbe725d291d:
-1. /Volumes/iTunes/Music/Nightwish/Bless The Child/02 The Wayfarer.m4a
-2. /Volumes/iTunes/Music/Nightwish/Century Child/12 The Wayfarer.m4a
-3. /Volumes/iTunes/Music/Nightwish/Ever Dream/03 The Wayfarer.m4a
-4. /Volumes/iTunes/Music/Nightwish/Highest Hopes/2-01 The Wayfarer.m4a
-5. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/15 Wayfarer.m4a
-6. /Volumes/iTunes/Music/Nightwish/Wishsides/2-03 The Wayfarer.m4a
------------------------------------
-What do you want to do?:
-(s)ymbolic link all to Library       (i)gnore
-
-OPTION: 
-```
-
 The groups will be sorted by the most amount of duplicates to the least. Sample output:
 
 ```Text
@@ -153,6 +131,28 @@ Showing Duplicates for e9ffe05f-ad4a-4906-afca-26cbbf628787:
 4. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/14 Lagoon.m4a
 5. /Volumes/iTunes/Music/Nightwish/Wishsides/2-07 Lagoon.m4a
 -----------------------------------
+```
+
+You can execute this command with the `-i` flag. This will show an interactive prompts where you can do some actions. Currently the only supported action is to create symbolic links of all files in the specified Library.
+
+`fsduplicates -s -i ~/Documents/fsduplicates_nightwish`
+
+You can then easily load all the symbolic links in a player to listen to them and decided what to do with the duplicates.
+
+```Text
+-----------------------------------
+Showing duplicates for 08fcc296-7d3f-483f-86ea-cfbe725d291d:
+1. /Volumes/iTunes/Music/Nightwish/Bless The Child/02 The Wayfarer.m4a
+2. /Volumes/iTunes/Music/Nightwish/Century Child/12 The Wayfarer.m4a
+3. /Volumes/iTunes/Music/Nightwish/Ever Dream/03 The Wayfarer.m4a
+4. /Volumes/iTunes/Music/Nightwish/Highest Hopes/2-01 The Wayfarer.m4a
+5. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/15 Wayfarer.m4a
+6. /Volumes/iTunes/Music/Nightwish/Wishsides/2-03 The Wayfarer.m4a
+-----------------------------------
+What do you want to do?:
+(s)ymbolic link all to Library       (i)gnore
+
+OPTION: 
 ```
 
 #### Manual Analysis
