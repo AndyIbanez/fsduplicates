@@ -100,11 +100,42 @@ You can try to calculate how long till an scanning operation completes. For exam
 
 #### Automatic Analysis
 
-*(Coming soon to a fsduplicates near you)*
+*(Incomplete Section)*
+
+You can execute the following command to show a list of fingerprint groups containing the songs that match the same `AcoustID`:
+
+`fsduplicates -s LIBRARY`
+
+Note that in order to execute this command, you must have executed the indexing process first.
+
+Example:
+
+`fsduplicates -s ~/Documents/fsduplicates_nightwish`
+
+The groups will be sorted by the most amount of duplicates to the least. Sample output:
+
+```Text
+-----------------------------------
+Showing Duplicates for 08fcc296-7d3f-483f-86ea-cfbe725d291d:
+1. /Volumes/iTunes/Music/Nightwish/Bless The Child/02 The Wayfarer.m4a
+2. /Volumes/iTunes/Music/Nightwish/Century Child/12 The Wayfarer.m4a
+3. /Volumes/iTunes/Music/Nightwish/Ever Dream/03 The Wayfarer.m4a
+4. /Volumes/iTunes/Music/Nightwish/Highest Hopes/2-01 The Wayfarer.m4a
+5. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/15 Wayfarer.m4a
+6. /Volumes/iTunes/Music/Nightwish/Wishsides/2-03 The Wayfarer.m4a
+-----------------------------------
+
+-----------------------------------
+Showing Duplicates for e9ffe05f-ad4a-4906-afca-26cbbf628787:
+1. /Volumes/iTunes/Music/Nightwish/Bless The Child/09 Lagoon.m4a
+2. /Volumes/iTunes/Music/Nightwish/Century Child/11 Lagoon.m4a
+3. /Volumes/iTunes/Music/Nightwish/Highest Hopes/2-08 Lagoon.m4a
+4. /Volumes/iTunes/Music/Nightwish/Tales From The Elvenpath/14 Lagoon.m4a
+5. /Volumes/iTunes/Music/Nightwish/Wishsides/2-07 Lagoon.m4a
+-----------------------------------
+```
 
 #### Manual Analysis
-
-In the very near future (hopefully), fsduplicate will have the ability to help you directly with your duplicates (actually there's some code already written for that), but until then, you will have to do some manual work.
 
 After the indexing process is done, fsduplicates will create the three files in the Library I talked about earlier. Following the example above, these files would be:
 
@@ -157,8 +188,6 @@ This command will show you just the `AcoustID`s of all the songs it indexed and 
 ```
 
 Now you can tell that the `AcoustID` `3b2ccbd5-3ed4-498a-bbd1-d915335927f4` appears on your library *6 times!* With this knowledge in hand, you can now `cat fps_library` again and then `ctrl + f` to find the songs that share that ID. You can decide what to do with them (delete them? Move them? up to you).
-
-I reiterate that fsduplicates will have tools to help you better manage duplicates in your library in the near future. In the meantime, this solution should be good for many people.
 
 > **Warning!**
 >
