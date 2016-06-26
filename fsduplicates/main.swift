@@ -11,7 +11,7 @@ import Foundation
 // MARK: Tool info
 
 /// Command line tool version
-let VERSION = "0.0.1"
+let VERSION = "0.0.2"
 
 /// Path of the fpcalc tool.
 let fpcalcPath: String
@@ -255,7 +255,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
         let filtered = cleaned.filter{ $0.repeated > 1 }
         
         // Read all the files from the library to do the the comparison.
-        let loggedFiles = shell(launchPath: "/bin/cat", arguments: [filesAndHashesFile]).characters.split{$0 == "\n"}.map(String.init)
+        var loggedFiles = shell(launchPath: "/bin/cat", arguments: [filesAndHashesFile]).characters.split{$0 == "\n"}.map(String.init)
         
         /// Represents a single action.
         enum SReadlineAction: String {
@@ -287,7 +287,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
         }
         
         /// Represents a valid interactive action.
-        typealias SReadlineOption = (action: SReadlineAction, fileSeletion: Int?, errorMessage: String?)
+        typealias SReadlineOption = (action: SReadlineAction, fileSelection: Int?, errorMessage: String?)
         
         func parseOption(userInput: String) -> SReadlineOption {
             let splat = userInput.characters.split{$0 == " "}.map(String.init)
@@ -356,8 +356,9 @@ if let showFlagIndex = arguments.index(of: "-s") {
                             continue
                         }
                         
+                        let acoustidDirPath = outputDir + "/\(acoustid)"
+                        
                         if option.action == .s {
-                            let acoustidDirPath = outputDir + "/\(acoustid)"
                             do {
                                 consoleOutput("Attempting to create directory for symbolic links...")
                                 try FileManager.default().createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false, attributes: nil)
@@ -369,7 +370,28 @@ if let showFlagIndex = arguments.index(of: "-s") {
                                     consoleOutput("Created symbolic link for \(songLink) \(file)")
                                 }
                             } catch {
-                                consoleOutput("Error creating symbolic links links: \(error)")
+                                consoleOutput("Error creating symbolic links: \(error)")
+                            }
+                        }
+                        
+                        if option.action == .m {
+                            do {
+                                if let file = option.fileSelection where (file - 1) < existing.count {
+                                    let songP = songPath(existing[file - 1])
+                                    consoleOutput("Attempting to move file to directory...")
+                                    //try FileManager.default().moveItem(atPath: songP, toPath: acoustidDirPath)
+                                    loggedFiles = loggedFiles.filter { return !$0.contains(songP) }
+                                    try FileManager.default().removeItem(atPath: filesAndHashesFile)
+                                    FileManager.default().createFile(atPath: filesAndHashesFile, contents: nil, attributes: nil)
+                                    for line in loggedFiles {
+                                        write(string: "\(line)\n", toFile: filesAndHashesFile)
+                                    }
+                                } else {
+                                    print("Invalid song number.")
+                                    continue
+                                }
+                            } catch {
+                                consoleOutput("Error moving file: \(error)")
                             }
                         }
                         
