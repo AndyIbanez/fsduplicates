@@ -75,6 +75,8 @@ Depending on the commands, fsduplicates will generate some files inside the Libr
 * `fps_library`: Contains a list of song files and the `AcoustID`s returned by AcoustID. Each line has this format: `ACOUSTID:SONG_PATH`. For discovering duplicates, you'd use this file.
 * `no_fps_library`: If AcoustID did not return a an `AcoustID` for one or more song files, their paths will be stored here. Consider contributing the fingerprints of the files listed here to AcoustID to improve their database.
 
+You can open these files, but you should **never** edit them manually.
+
 ### Indexing Songs and Finding Duplicates
 
 You can index your songs with the following command:
@@ -93,3 +95,71 @@ fsduplicates -f /Volumes/iTunes/Music/Nightwish ~/Documents/fsduplicates_nightwi
 Please note that **the indexing process can take a very long time** if the folder you want to index contains many songs or if you have a slow internet connection. fsduplicates needs to contact AcoustID's database for *every song* and return the results. And not only that, but AcoustID's rules force developers to not make more than three requests per second. For this reason fsduplicate calls `sleep(3)` which makes it wait 3 seconds for every 3 requests. Why three seconds instead of one? I do not want the app to appear like a crawler or like a spammy app in general, so I added a longer waiting time. On the plus side, you can start an indexing process and stop it before it completes. Next time you start the scanning process in the same Library, it will skip the files that have already been indexed, saving you some time.
 
 You can try to calculate how long till an scanning operation completes. For example, if a folder contains 180 songs, it would take *at least* one minute for fsduplicates to finish indexing them. This is a rough estimate, because `fpcalc` doesn't return immediately either, and it can take a few seconds to finish, depending on the song length.
+
+### Working with Duplicates
+
+#### Automatic Analysis
+
+**(Coming soon to a fsduplicates near you)**
+
+#### Manual Analysis
+
+In the very near future (hopefully), fsduplicate will have the ability to help you directly with your duplicates (actually there's some code already written for that), but until then, you will have to do some manual work.
+
+After the indexing process is done, fsduplicates will create the three files in the Library I talked about earlier. Following the example above, these files would be:
+
+* `~/Documents/fsduplicates_nightwish/library`
+* `~/Documents/fsduplicates_nightwish/fps_library`
+* `~/Documents/fsduplicates_nightwish/no_fps_library`
+
+Having these files now, we can use some Shell commands to analyze them better. You don't need to install any new command line tools, as OS X/macOS already comes with the tools you need.
+
+`cd` to the library (in this case, `~/Documents/fsduplicates_nightwish`), and execute these commands:
+
+`cat fps_library`
+
+This is the basic command to open a file and display it in your Terminal in any UNIX system. Here is a sample of its output:
+
+```Text
+d038b70a-7298-476f-a1d8-0a8dfdc0e831:/Volumes/iTunes/Music/Nightwish/Wishsides/2-08 A Return To The Sea.m4a
+5cf10542-7fad-407c-995c-cd4b2ff0f8f0:/Volumes/iTunes/Music/Nightwish/Wishsides/2-09 Swanheart (Live).m4a
+eda19d4e-38e4-496f-a107-c1217971d42f:/Volumes/iTunes/Music/Nightwish/Wishsides/2-10 Deep Sient Complete (Live).m4a
+e8b0c206-3b72-43e9-a91b-6d4fbbdf8054:/Volumes/iTunes/Music/Nightwish/Wishsides/2-11 Dead Boys Poem (Live).m4a
+5cae6bc9-47ff-4b8a-a4d2-8acdf774432d:/Volumes/iTunes/Music/Nightwish/Wishsides/2-12 Crimson Tide Deep Blue Sea (Live).m4a`
+```
+
+This will show you the list of indexed songs with their fingerprints in the order they were indexed. Not very useful on its own, but the `cat` command is the basis of many things you can do.
+
+The following is a good command you can type to have a better idea of what songs are duplicates:
+
+`cat fps_library | cut -d":" -f1 | sort | uniq -c | sort`
+
+This command will show you just the `AcoustID`s of all the songs it indexed and how many times this show up. This is a sample on my own machine:
+
+```Text
+   3 dc663a4b-504a-433a-8460-470e14dbea63
+   3 dd383e78-9abc-4b8a-b3e1-8c127322b657
+   3 e783d332-254c-4e16-ad58-5c5298416b4e
+   4 4a8cbe8e-01b9-415f-bf83-168c4efceacf
+   4 b2f77e43-ed0d-4a1e-93b0-24cd08b3d9cf
+   4 c22d1eb9-66cd-4566-b41d-6e68f79665a0
+   4 c280a720-e92b-4ca0-aecf-3a4fe64386f3
+   4 caef6e27-dc4b-45ad-9019-f16ab26830dd
+   4 d3f69aac-af0a-4295-b419-47ecb61677e3
+   5 772cd814-856e-4181-ab46-49d75bd6b080
+   5 78718f73-162f-406e-9d87-276fa56998ed
+   5 8278b2e9-eb61-48e7-aef0-254e2a59e739
+   5 9552ca9a-94ca-41c6-a008-e90006f89b03
+   5 d038b70a-7298-476f-a1d8-0a8dfdc0e831
+   5 e9ffe05f-ad4a-4906-afca-26cbbf628787
+   6 08fcc296-7d3f-483f-86ea-cfbe725d291d
+   6 3b2ccbd5-3ed4-498a-bbd1-d915335927f4
+```
+
+Now you can tell that the `AcoustID` `3b2ccbd5-3ed4-498a-bbd1-d915335927f4` appears on your library *6 times!* With this knowledge in hand, you can now `cat fps_library` again and then `ctrl + f` to find the songs that share that ID. You can decide what to do with them (delete them? Move them? up to you).
+
+I reiterate that fsduplicates will have tools to help you better manage duplicates in your library in the near future. In the meantime, this solution should be good for many people.
+
+> **Warning!**
+>
+> Even if the `AcoustID`s are the same, you should take some care and listen to them before deleting them to ensure they really are the same song. Audio Fingerprinting works great and it has a strong mathematical background, but there's still a chance it will bring back inaccurate results. Still, AcoustID is used by many popular apps used by audiophiles, so there's probably little to worry about.
