@@ -260,14 +260,16 @@ if let showFlagIndex = arguments.index(of: "-s") {
         for item in filtered {
             let acoustid = item.acoustID
             print("\n-----------------------------------")
-            print("Showing Duplicates for \(acoustid):")
+            print("Showing duplicates for \(acoustid):")
             var counter = 0
-            let existing = loggedFiles.map { line in
+            let existing = loggedFiles.filter { line in
                 if line.contains(acoustid) {
                     let lineFileOnly = line.characters.split{$0 == ":"}.map(String.init)
                     counter += 1
                     print("\(counter). \(lineFileOnly[1])")
+                    return true
                 }
+                return false
             }
             print("-----------------------------------")
         }
