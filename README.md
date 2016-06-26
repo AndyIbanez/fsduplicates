@@ -67,8 +67,29 @@ It's good to know some concepts I have defined in the development of fsduplicate
 
 Whenever you see a command that takes a `DIR_TO_OUTPUT` parameter, this parameter is called a *Library Path*. When you are executing operations with fsduplicates, it will generate files and put them in this *Library*. You need to manually create this *Library*, either using finder or the Shell's `mkdir` dir, and pass it on to fsduplicates flags that need it.
 
-The process of going through your music library and getting their `AcoustID`s is called *Indexing*.
+The process of going through your music library and getting their `AcoustID`s is called *Indexing*. The indexing process will not move or delete any of your files. It will simply generate new text files with their data.
 
 Depending on the commands, fsduplicates will generate some files inside the Library you passed it.
 
-* `library`: This is a plain text file that simply includes all the files it has indexed in a folder you passed as a `DIR_TO_SEARCH` parameter. For example, it can list all the songs it has proceeded in your `Music` folder in your Mac User Directory. This file aids fsduplicates to avoid reindexing songs and make it more efficient.
+* `library`: This is a plain text file that has all the files it has indexed in a folder you passed as a `DIR_TO_SEARCH` parameter. For example, it can list all the songs it has proceeded in your `Music` folder in your Mac User Directory. This file helps fsduplicates avoid reindexing songs and make it more efficient.
+* `fps_library`: Contains a list of song files and the `AcoustID`s returned by AcoustID. Each line has this format: `ACOUSTID:SONG_PATH`. For discovering duplicates, you'd use this file.
+* `no_fps_library`: If AcoustID did not return a an `AcoustID` for one or more song files, their paths will be stored here. Consider contributing the fingerprints of the files listed here to AcoustID to improve their database.
+
+### Indexing Songs and Finding Duplicates
+
+You can index your songs with the following command:
+
+```Bash
+fsduplicates -f DIR_TO_SEARCH DIR_TO_OUTPUT
+```
+
+For example, if you had music by the band Nightwish in the directory `/Volumes/iTunes/Music/Nightwish`, and you wanted to index them in a new library `~/Documents/fsduplicates_nightwish`, you would execute something like this:
+
+```Bash
+mkdir ~/Documents/fsduplicates_nightwish
+fsduplicates -f /Volumes/iTunes/Music/Nightwish ~/Documents/fsduplicates_nightwish
+```
+
+Please note that **the indexing process can take a very long time** if the folder you want to index contains many songs or if you have a slow internet connection. fsduplicates needs to contact AcoustID's database for *every song* and return the results. And not only that, but AcoustID's rules force developers to not make more than three requests per second. For this reason fsduplicate calls `sleep(3)` which makes it wait 3 seconds for every 3 requests. Why three seconds instead of one? I do not want the app to appear like a crawler or like a spammy app in general, so I added a longer waiting time. On the plus side, you can start an indexing process and stop it before it completes. Next time you start the scanning process in the same Library, it will skip the files that have already been indexed, saving you some time.
+
+You can try to calculate how long till an scanning operation completes. For example, if a folder contains 180 songs, it would take *at least* one minute for fsduplicates to finish indexing them. This is a rough estimate, because `fpcalc` doesn't return immediately either, and it can take a few seconds to finish, depending on the song length.
