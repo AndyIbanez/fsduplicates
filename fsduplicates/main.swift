@@ -346,7 +346,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
                 var option: SReadlineOption = (.invalid, nil, nil)
                 repeat {
                     print("What do you want to do?:")
-                    print("(m)ove file to Library               (d)elete a file")
+                    //print("(m)ove file to Library               (d)elete a file")
                     print("(s)ymbolic link all to Library       (i)gnore")
                     print("\nOPTION: ")
                     if let opt = readLine(strippingNewline: true) {
