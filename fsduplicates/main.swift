@@ -182,7 +182,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
         exit(1)
     }
     
-    consoleOutput("Detecting duplicates...")
+    consoleOutput("Gathering duplicates...")
     
     // Executing logic.
     
@@ -255,9 +255,24 @@ if let showFlagIndex = arguments.index(of: "-s") {
         let filtered = cleaned.filter{ $0.repeated > 1 }
         
         // Read all the files from the library to do the the comparison.
-        let loggedFiles = shell(launchPath: "/bin/cat", arguments: [outputSourceFile]).characters.split{$0 == "\n"}.map(String.init)
+        let loggedFiles = shell(launchPath: "/bin/cat", arguments: [filesAndHashesFile]).characters.split{$0 == "\n"}.map(String.init)
         
-        print("filtered \(filtered)")
+        for item in filtered {
+            let acoustid = item.acoustID
+            print("\n-----------------------------------")
+            print("Showing Duplicates for \(acoustid):")
+            var counter = 0
+            let existing = loggedFiles.map { line in
+                if line.contains(acoustid) {
+                    let lineFileOnly = line.characters.split{$0 == ":"}.map(String.init)
+                    counter += 1
+                    print("\(counter). \(lineFileOnly[1])")
+                }
+            }
+            print("-----------------------------------")
+        }
+        
+        //print("filtered \(filtered)")
     } else {
         consoleOutput("Error reading proceded results.")
         exit(1)
