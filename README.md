@@ -40,7 +40,7 @@ brew install chromaprint
 > **Warning**
 > I repeat, this software is incomplete. Use it under your own risk.
 
-[Download fsduplicates](https://github.com/AndyIbanez/fsduplicates/releases/download/v0.0.2/fsduplicates). Open Finder and select `Go` > `Go To Folder...`. Move the binary there.
+[Download fsduplicates](https://github.com/AndyIbanez/fsduplicates/releases/download/v0.0.2/fsduplicates). Open Finder and select `Go` > `Go To Folder...`. Navigate to the `/usr/local/bin` directory and move the binary there.
 
 If you have Terminal window open, you may need to close it and open it again.
 
