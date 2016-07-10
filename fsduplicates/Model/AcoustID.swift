@@ -43,9 +43,9 @@ class AcoustID {
     
     /// Initializes an AcoustID object. The Client ID should be set in the client_id.plist inside the Meta directory.
     private init() {
-        let bundle = Bundle.main()
+        let bundle = Bundle.main
         
-        let fileManager = FileManager.default()
+        let fileManager = FileManager.default
             
         var isDir: ObjCBool = false
         if let clientIDPlistPath = bundle.pathForResource("client_id", ofType: "plist") where fileManager.fileExists(atPath: clientIDPlistPath, isDirectory: &isDir) {

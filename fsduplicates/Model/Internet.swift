@@ -14,7 +14,7 @@ typealias HTTPResult = (data: Data?, statusCode: Int?, error: ErrorProtocol?) ->
 /// Small helper class to deal with HTTP.
 class Internet {
     /// Main Session object belonging to this class.
-    private let session = URLSession(configuration: .default())
+    private let session = URLSession(configuration: .default)
     
     /// Shared instance.
     static let shared = Internet()

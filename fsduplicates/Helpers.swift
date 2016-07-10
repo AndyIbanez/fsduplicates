@@ -67,7 +67,7 @@ func validDirectory(path: String, parameterName: String) -> DirectoryCheckStatus
     
     let message: String?
     
-    if FileManager.default().fileExists(atPath: path, isDirectory: &isDir) {
+    if FileManager.default.fileExists(atPath: path, isDirectory: &isDir) {
         if !isDir {
             message = "\(parameterName): not a directory."
         } else {

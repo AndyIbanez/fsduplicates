@@ -46,7 +46,7 @@ if let fpcalcIndex = arguments.index(of: "-fpcalc-path") {
 }
 
 // Ensuring that fpcalc does exist at the specified path and can be called.
-let fpcalcExecutableExists = FileManager.default().isExecutableFile(atPath: fpcalcPath)
+let fpcalcExecutableExists = FileManager.default.isExecutableFile(atPath: fpcalcPath)
 if !fpcalcExecutableExists {
     print("\(fpcalcPath) does not exist. Exiting...")
     exit(1)
@@ -104,7 +104,7 @@ if let fFlagIndex = arguments.index(of: "-f") {
     consoleOutput("Reading files in directory...")
     
     var isDir: ObjCBool = false
-    let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default().fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
+    let sourceFiles = shell(launchPath: "/usr/bin/find", arguments: [sourceDir, "-name", "*"]).characters.split{$0 == "\n"}.map(String.init).filter{ FileManager.default.fileExists(atPath: $0, isDirectory: &isDir) && !isDir }
     consoleOutput("Validating songs against AcoustID and building the index. This can take a while...")
     
     /// AcoustID's API requirements only allow us to make three calls every second. We will manually get three elements per iteration, and the stride will help us avoid repetition.
@@ -177,7 +177,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
     let filesAndHashesFile = outputDir + "/fps_library"
     let noFingerprintsFile = outputDir + "/no_fps_library"
     
-    if !FileManager.default().fileExists(atPath: filesAndHashesFile) {
+    if !FileManager.default.fileExists(atPath: filesAndHashesFile) {
         print("No duplicates found. Did you run the -f flag specifying \(outputDir) as the DIR_TO_OUTPUT?")
         exit(1)
     }
@@ -242,7 +242,7 @@ if let showFlagIndex = arguments.index(of: "-s") {
     if let res = resultFps {
         //  string.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         let cleaned: [FingerprintRepetitions] = res.map { rawPair in
-            let noWs = rawPair.trimmingCharacters(in: NSCharacterSet.whitespaces())
+            let noWs = rawPair.trimmingCharacters(in: NSCharacterSet.whitespaces)
             let pair = noWs.characters.split{ $0 == " " }.map(String.init)
             if let nInt = Int(pair[0]) {
                 let p: FingerprintRepetitions = (nInt, pair[1])
@@ -361,12 +361,12 @@ if let showFlagIndex = arguments.index(of: "-s") {
                         if option.action == .s {
                             do {
                                 consoleOutput("Attempting to create directory for symbolic links...")
-                                try FileManager.default().createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false, attributes: nil)
+                                try FileManager.default.createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false, attributes: nil)
                                 consoleOutput("Directory created for symbolic links: \(acoustidDirPath)")
                                 for file in existing {
                                     let nameSong = songName(file)
                                     let songLink = acoustidDirPath + "/\(nameSong)"
-                                    try FileManager.default().createSymbolicLink(atPath: songLink, withDestinationPath: songPath(file))
+                                    try FileManager.default.createSymbolicLink(atPath: songLink, withDestinationPath: songPath(file))
                                     consoleOutput("Created symbolic link for \(songLink) \(file)")
                                 }
                             } catch {
@@ -380,11 +380,11 @@ if let showFlagIndex = arguments.index(of: "-s") {
                                     let songP = songPath(existing[file - 1])
                                     let songN = songName(songP)
                                     consoleOutput("Attempting to move file to directory...")
-                                    try FileManager.default().createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false , attributes: nil)
-                                    try FileManager.default().moveItem(atPath: songP, toPath: (acoustidDirPath + "/\(songN)"))
+                                    try FileManager.default.createDirectory(atPath: acoustidDirPath, withIntermediateDirectories: false , attributes: nil)
+                                    try FileManager.default.moveItem(atPath: songP, toPath: (acoustidDirPath + "/\(songN)"))
                                     loggedFiles = loggedFiles.filter { return !$0.contains(songP) }
-                                    try FileManager.default().removeItem(atPath: filesAndHashesFile)
-                                    FileManager.default().createFile(atPath: filesAndHashesFile, contents: nil, attributes: nil)
+                                    try FileManager.default.removeItem(atPath: filesAndHashesFile)
+                                    FileManager.default.createFile(atPath: filesAndHashesFile, contents: nil, attributes: nil)
                                     for line in loggedFiles {
                                         write(string: "\(line)\n", toFile: filesAndHashesFile)
                                     }
